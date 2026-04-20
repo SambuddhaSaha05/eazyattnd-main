@@ -1,0 +1,18 @@
+#Utilities
+numpy
+pandas
+
+# FACE RECOGNITION
+scikit-learn
+dlib-bin #since dlib is difficult to install or use python -m pip install dlib-20.0.99-cp314-cp314-win_amd64.whl
+
+git+https://github.com/ageitgey/face_recognition_models
+setuptools<70.0.0
+
+supabase
+bcrypt #give hashing methods -> eg to store passwords, so that no one can decode
+
+segno #used to make qr code, by giving url it generates the qr code
+pillow #used in importing img or image pre-processing (one of the most useful image dealing library)
+
+streamlit #frontend library -> make presentation of app beautiful and easier
