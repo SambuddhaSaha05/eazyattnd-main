@@ -11,7 +11,7 @@ def style_background_home():
                 
             .stApp div[data-testid="stColumn"]{
                 background-color: #E0E3FF !important;
-                padding: 2.5rem !important;
+                padding: 1.2rem !important;
                 border-radius: 2rem !important;
             }
         </style>
@@ -19,7 +19,16 @@ def style_background_home():
 
 
 
-def style_base_dashboard():
+# def style_base_dashboard():
+#     st.markdown("""
+#         <style>
+#         .stApp {
+#             background-color: #E0E3FF !important;
+#         }
+#         </style>
+#     """, unsafe_allow_html=True)
+
+def style_background_dashboard():
     st.markdown("""
         <style>
         .stApp {
@@ -35,19 +44,20 @@ def style_base_layout():
             @import url('https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
             /* Hide Top Bar of Streamlit */
-            #MainMenu, footer, header {
+            MainMenu, footer, header {
                 visibility: hidden;
             }
 
             .block-container {
-                padding-top: 0.5rem !important
+            padding-top: 0rem !important;
+            padding-bottom: 0rem !important;
             }
-                
+            
             h1{
                 font-family: 'Climate Crisis', sans-serif !important;
-                font-size: 3.5rem !important;
+                font-size: 2.8rem !important;
                 font-weight: 800 !important;
-                margin-bottom: 0.3rem !important;
+                margin-bottom: 0.1rem !important;
                 text-align: center;
                 color: black !important;
             
@@ -60,6 +70,7 @@ def style_base_layout():
                 margin-bottom: 0rem !important;
                 
                 color: black !important;
+                white-space: nowrap !important; 
 
               
             }
@@ -71,7 +82,7 @@ def style_base_layout():
                 
             button{
                 border-radius: 1.5rem !important;
-                background: #5865F2 !important;
+                background-color: #5865F2 !important;
                 color: white !important;
                 padding: 10px 20px !important;
                 border: none !important;
@@ -79,7 +90,7 @@ def style_base_layout():
             }   
             button[kind="secondary"]{
                 border-radius: 1.5rem !important;
-                background: #EB459E !important;
+                background-color: #EB459E !important;
                 color: white !important;
                 padding: 10px 20px !important;
                 border: none !important;
@@ -88,7 +99,7 @@ def style_base_layout():
                 
             button[kind="tertiary"]{
                 border-radius: 1.5rem !important;
-                background: black !important;
+                background-color: black !important;
                 color: white !important;
                 padding: 10px 20px !important;
                 border: none !important;
@@ -98,6 +109,10 @@ def style_base_layout():
             button:hover{
                 transform: scale(1.05)
             }
+            html, body, [data-testid="stAppViewContainer"] {
+            height: 100vh;
+            overflow: hidden;
+        }
                 
 
 
