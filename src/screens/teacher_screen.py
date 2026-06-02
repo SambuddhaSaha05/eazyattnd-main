@@ -209,12 +209,17 @@ def teacher_tab_take_attendance():
 
 def teacher_tab_manage_subjects():
     teacher_id = st.session_state.teacher_data['teacher_id']
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([4, 1], vertical_alignment="center")
     with col1:
-        st.header('Manage Subjects', width='stretch')
+        st.header("Manage Subjects")
+
 
     with col2:
-        if st.button('Create New Subject', width='stretch'):
+        if st.button(
+            "➕ New Subject",
+            type="primary",
+            use_container_width=True
+        ):
             create_subject_dialog(teacher_id)
 
 

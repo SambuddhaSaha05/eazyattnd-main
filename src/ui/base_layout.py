@@ -32,7 +32,7 @@ def style_background_dashboard():
     st.markdown("""
         <style>
         .stApp {
-            background-color: #E0E3FF !important;
+            background-color: #DFF6FF !important;
         }
         </style>
     """, unsafe_allow_html=True)
