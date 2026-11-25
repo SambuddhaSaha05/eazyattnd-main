@@ -1,12 +1,13 @@
 
 import streamlit as st
+from textwrap import dedent
 
 
 def header_home():
-
     logo_url = "https://i.ibb.co/YTYGn5qV/logo.png"
 
-    st.markdown(f"""
+    st.markdown(
+        dedent(f"""
         <div style="
             display: flex;
             flex-direction: column;
@@ -15,7 +16,6 @@ def header_home():
             margin-bottom: 10px;
             margin-top: 10px;
         ">
-
             <img
                 src="{logo_url}"
                 style="height: 100px; width: auto; object-fit: contain;"
@@ -28,17 +28,17 @@ def header_home():
             ">
                 EAZY<br>ATTND
             </h1>
-
         </div>
-    """, unsafe_allow_html=True)
-
+        """),
+        unsafe_allow_html=True
+    )
 
 
 def header_dashboard():
-
     logo_url = "https://i.ibb.co/YTYGn5qV/logo.png"
 
-    st.markdown(f"""
+    st.markdown(
+        dedent(f"""
         <div style="
             display: flex;
             align-items: center;
@@ -46,7 +46,6 @@ def header_dashboard():
             gap: 10px;
             flex-wrap: wrap;
         ">
-
             <img
                 src="{logo_url}"
                 style="
@@ -65,32 +64,9 @@ def header_dashboard():
             ">
                 EAZY<br>ATTND
             </div>
-
         </div>
-    """, unsafe_allow_html=True)
+        """),
+        unsafe_allow_html=True
+    )
 
-
-# import streamlit as st
-
-# def header_home():
-#     logo_url = "https://i.ibb.co/YTYGn5qV/logo.png"
-
-#     st.markdown(f"""
-#         <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; margin-botton:10px; margin-top:10px">
-#             <img src='{logo_url}' style='height:100px;' />
-#             <h1 style='text-align:center'; color:'#E0E3FF'>EAZY<br/>ATTND</h1>
-            
-#         </div>
-#     """, unsafe_allow_html=True)
-    
-
-# def header_dashboard():
-#     logo_url = "https://i.ibb.co/YTYGn5qV/logo.png"
-
-#     st.markdown(f"""
-#         <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-#             <img src='{logo_url}' style='height:85px;' />
-#             <h2 style='text-align:left'; color:'#5865F2'>EAZY<br/>ATTND<h2/>
-#         </div>
-#     """, unsafe_allow_html=True)
 
