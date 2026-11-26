@@ -170,22 +170,19 @@ def student_dashboard():
         st.subheader(f"""Welcome, {student_data['name']} """)
         if st.button("Logout", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
             st.session_state['is_logged_in'] = False
-            del st.session_state.student_data 
+            del st.session_state.student_data
             st.rerun()
-
 
     st.space()
 
-    c1, c2 =st.columns(2)
+    c1, c2 = st.columns(2)
     with c1:
         st.header('Your Enrolled Subjects')
     with c2:
         if st.button('Enroll in Subject', type='primary', width='stretch'):
             enroll_dialog()
 
-
     st.divider()
-
 
     with st.spinner('Loading your enrolled subjects..'):
         subjects = get_student_subjects(student_id)
@@ -197,34 +194,38 @@ def student_dashboard():
         sid = log['subject_id']
 
         if sid not in stats_map:
-            stats_map[sid] = {"total":0, "attended": 0}
+            stats_map[sid] = {"total": 0, "attended": 0}
 
-        stats_map[sid]['total'] +=1
+        stats_map[sid]['total'] += 1
 
         if log.get('is_present'):
             stats_map[sid]['attended'] += 1
-
 
     cols = st.columns(2)
     for i, sub_node in enumerate(subjects):
         sub = sub_node['subjects']
         sid = sub['subject_id']
 
+        stats = stats_map.get(sid, {"total": 0, "attended": 0})
 
-        stats = stats_map.get(sid,{"total":0, "attended": 0} )
-        def unenroll_button():
-                if st.button("Unenroll from tihs course", type='tertiary', width='stretch', icon=':material/delete_forever:'):
-                    unenroll_student_to_subject(student_id, sid)
-                    st.toast(f'Unenrolled from {sub["name"]} successfully!')
-                    st.rerun()
+        def unenroll_button(subject_id=sid, subject_name=sub['name']):
+            if st.button(
+                "Unenroll from this course",
+                key=f"unenroll_{subject_id}",
+                type='tertiary',
+                width='stretch',
+                icon=':material/delete_forever:'
+            ):
+                unenroll_student_to_subject(student_id, subject_id)
+                st.toast(f'Unenrolled from {subject_name} successfully!')
+                st.rerun()
 
         with cols[i % 2]:
-
             subject_card(
-                name = sub['name'],
-                code =sub['subject_code'],
-                section = sub['section'],
-                stats = [
+                name=sub['name'],
+                code=sub['subject_code'],
+                section=sub['section'],
+                stats=[
                     ('📅', 'Total', stats['total']),
                     ('✅', 'Attended', stats['attended']),
                 ],
@@ -235,16 +236,14 @@ def student_dashboard():
 
 def student_screen():
 
-
     style_background_dashboard()
     style_base_layout()
     style_student_theme()
 
-
     if "student_data" in st.session_state:
         student_dashboard()
         return
-    
+
     c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
     with c1:
         header_dashboard()
@@ -256,7 +255,7 @@ def student_screen():
     st.header('Login using FaceID', text_alignment='center')
     st.space()
     st.space()
-    
+
     show_registration = False
     photo_source = st.camera_input("Position your face in the center")
 
@@ -268,13 +267,13 @@ def student_screen():
 
             if num_faces == 0:
                 st.warning('Face not found!')
-            elif num_faces >1:
+            elif num_faces > 1:
                 st.warning('Multiple faces found')
             else:
                 if detected:
                     student_id = list(detected.keys())[0]
                     all_students = get_all_students()
-                    student = next((s for s in all_students if s['student_id']==student_id), None)
+                    student = next((s for s in all_students if s['student_id'] == student_id), None)
 
                     if student:
                         st.session_state.is_logged_in = True
@@ -294,7 +293,6 @@ def student_screen():
             st.subheader('Optional : Voice Enrollment')
             st.info("Enroll your for voice only attendance")
 
-
             audio_data = None
 
             try:
@@ -306,7 +304,7 @@ def student_screen():
                 if new_name:
                     with st.spinner('Creating profile..'):
                         img = np.array(Image.open(photo_source))
-                        encodings= get_face_embeddings(img)
+                        encodings = get_face_embeddings(img)
                         if encodings:
                             face_emb = encodings[0].tolist()
 
@@ -330,6 +328,4 @@ def student_screen():
                 else:
                     st.warning('Please enter your name!')
 
-
-        
     footer_dashboard()
