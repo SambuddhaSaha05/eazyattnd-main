@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 from src.ui.base_layout import style_background_dashboard, style_base_layout
@@ -25,33 +24,72 @@ from src.components.dialog_voice_attendance import voice_attendance_dialog
 def style_teacher_theme():
     st.markdown("""
     <style>
-
-        /* Main headings */
-        h1, h2, h3, h4 {
-            color: #111827 !important;
-        }
-
-        /* Welcome message */
+        /* Teacher welcome badge/heading - High-contrast surface so name always pops */
         .teacher-welcome {
-            color: #111827 !important;
-            font-size: 30px !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            color: #0F172A !important;
+            font-size: 26px !important;
             font-weight: 800 !important;
             font-family: 'Outfit', sans-serif !important;
+            padding: 0.65rem 1.25rem !important;
+            border-radius: 14px !important;
+            border: 1px solid #E2E8F0 !important;
+            border-left: 5px solid #4338CA !important;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+            margin-bottom: 0.75rem !important;
+            display: inline-block !important;
+        }
+
+        /* Headings across dashboard, tabs, and dialogs */
+        h1, h2, h3, h4,
+        div[data-testid="stHeading"] h1,
+        div[data-testid="stHeading"] h2,
+        div[data-testid="stHeading"] h3,
+        div[data-testid="stHeading"] h4 {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.02em !important;
+        }
+
+        /* Subject cards & bordered containers */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem !important;
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.07) !important;
+        }
+
+        /* Ensure all text inside subject cards, markdown blocks, captions, and metrics is readable */
+        div[data-testid="stMarkdownContainer"] p,
+        div[data-testid="stMarkdownContainer"] span,
+        div[data-testid="stMarkdownContainer"] strong,
+        div[data-testid="stMarkdownContainer"] div,
+        div[data-testid="stCaptionContainer"] p,
+        div[data-testid="stMetricValue"],
+        div[data-testid="stMetricLabel"] p {
+            color: #0F172A !important;
         }
 
         /* Widget labels */
         div[data-testid="stWidgetLabel"] p,
         div[data-testid="stWidgetLabel"] label {
-            color: #1F2937 !important;
+            color: #1E293B !important;
             font-weight: 600 !important;
         }
 
         /* Input fields */
         input, textarea {
             background-color: #FFFFFF !important;
-            color: #111827 !important;
-            -webkit-text-fill-color: #111827 !important;
+            color: #0F172A !important;
+            -webkit-text-fill-color: #0F172A !important;
+            border: 1.5px solid #CBD5E1 !important;
             border-radius: 10px !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4338CA !important;
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15) !important;
         }
 
         /* Placeholder text */
@@ -61,65 +99,120 @@ def style_teacher_theme():
             -webkit-text-fill-color: #64748B !important;
         }
 
-        /* Primary buttons - Indigo */
+        /* Selectbox control & dropdown menu options */
+        div[data-baseweb="select"] > div {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 10px !important;
+        }
+
+        div[data-baseweb="select"] div,
+        div[data-baseweb="select"] span,
+        ul[data-testid="stSelectboxVirtualDropdown"] li,
+        div[role="listbox"] li {
+            color: #0F172A !important;
+            background-color: #FFFFFF !important;
+        }
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li:hover,
+        div[role="listbox"] li:hover {
+            background-color: #EEF2FF !important;
+        }
+
+        /* Primary buttons - Indigo Gradient (Active Tabs, Add Photos, Voice Attendance, New Subject) */
         button[data-testid="stBaseButton-primary"],
         button[kind="primary"] {
-            background-color: #4F46E5 !important;
+            background: linear-gradient(135deg, #4338CA 0%, #2563EB 100%) !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22) !important;
         }
 
-        /* Secondary buttons - Pink */
+        /* Secondary buttons - Refined Rose (Logout, Go back to Home, Run Face Analysis, Share) */
         button[data-testid="stBaseButton-secondary"],
         button[kind="secondary"] {
-            background-color: #DB3A93 !important;
+            background-color: #E11D48 !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 10px rgba(225, 29, 72, 0.2) !important;
         }
 
-        /* Tertiary buttons - Navy */
+        /* Tertiary buttons - Deep Slate (Inactive Tabs, Clear Photos) */
         button[data-testid="stBaseButton-tertiary"],
         button[kind="tertiary"] {
-            background-color: #111827 !important;
+            background-color: #1E293B !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
         }
 
-        /* Button labels */
-        button p, button span {
+        /* Button labels scoped strictly to action buttons */
+        button[data-testid="stBaseButton-primary"] p,
+        button[data-testid="stBaseButton-primary"] span,
+        button[kind="primary"] p,
+        button[kind="primary"] span,
+        button[data-testid="stBaseButton-secondary"] p,
+        button[data-testid="stBaseButton-secondary"] span,
+        button[kind="secondary"] p,
+        button[kind="secondary"] span,
+        button[data-testid="stBaseButton-tertiary"] p,
+        button[data-testid="stBaseButton-tertiary"] span,
+        button[kind="tertiary"] p,
+        button[kind="tertiary"] span {
             color: #FFFFFF !important;
         }
 
         /* Hover effect */
-        button:hover {
-            opacity: 0.92 !important;
-            transition: 0.2s ease-in-out;
+        button:hover:not(:disabled) {
+            opacity: 0.94 !important;
+            transform: translateY(-1px) !important;
+            transition: all 0.2s ease-in-out !important;
         }
 
-        /* Alerts - preserve readable text */
+        button:disabled {
+            opacity: 0.45 !important;
+        }
+
+        /* Alerts */
         div[data-testid="stAlert"] {
+            background-color: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid #CBD5E1 !important;
             border-radius: 12px !important;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05) !important;
         }
 
-        div[data-testid="stAlert"] p {
-            color: #111827 !important;
+        div[data-testid="stAlert"] p,
+        div[data-testid="stAlert"] span {
+            color: #0F172A !important;
+            font-weight: 500 !important;
         }
 
-        /* Selectbox text */
-        div[data-baseweb="select"] div {
-            color: #111827 !important;
-        }
-
-        /* Dataframe text */
+        /* Dataframe container & text */
         div[data-testid="stDataFrame"] {
-            color: #111827 !important;
+            background-color: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 14px !important;
+            padding: 0.5rem !important;
+            color: #0F172A !important;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        /* Modal Dialogs (Attendance Results, Share Subject, Add Photos) */
+        div[data-testid="stDialog"] div[role="dialog"] {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border-radius: 18px !important;
         }
 
         /* Divider */
         hr {
             border-color: #CBD5E1 !important;
         }
-
     </style>
     """, unsafe_allow_html=True)
 
