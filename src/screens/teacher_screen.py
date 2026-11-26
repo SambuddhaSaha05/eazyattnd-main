@@ -22,10 +22,198 @@ from src.database.config import supabase
 
 
 from src.components.dialog_voice_attendance import voice_attendance_dialog
+
+
+def style_teacher_theme():
+    st.markdown("""
+    <style>
+        /* Force clean light background so dark text always has high contrast */
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"] {
+            background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%) !important;
+            color: #0F172A !important;
+        }
+
+        /* All headings (including st.subheader for Welcome, Name) */
+        h1, h2, h3, h4, h5, h6,
+        div[data-testid="stHeading"] h1,
+        div[data-testid="stHeading"] h2,
+        div[data-testid="stHeading"] h3,
+        div[data-testid="stHeading"] h4 {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+
+        /* All general text, markdown, captions, and spinner text */
+        p, span, label, div[data-testid="stText"],
+        div[data-testid="stMarkdownContainer"] p,
+        div[data-testid="stMarkdownContainer"] span,
+        div[data-testid="stMarkdownContainer"] strong,
+        div[data-testid="stCaptionContainer"] p,
+        div[data-testid="stSpinner"] p,
+        div[data-testid="stSpinner"] div {
+            color: #1E293B !important;
+        }
+
+        /* Widget labels */
+        div[data-testid="stWidgetLabel"] p,
+        div[data-testid="stWidgetLabel"] label {
+            color: #0F172A !important;
+            font-weight: 600 !important;
+        }
+
+        /* Bordered containers & subject cards */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem !important;
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08) !important;
+        }
+
+        /* Text inputs */
+        input, textarea {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            -webkit-text-fill-color: #0F172A !important;
+            border: 1.5px solid #94A3B8 !important;
+            border-radius: 10px !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4338CA !important;
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.18) !important;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #64748B !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #64748B !important;
+        }
+
+        /* Selectbox & dropdown menu options */
+        div[data-baseweb="select"] > div {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #94A3B8 !important;
+            border-radius: 10px !important;
+        }
+
+        div[data-baseweb="select"] div,
+        div[data-baseweb="select"] span,
+        ul[data-testid="stSelectboxVirtualDropdown"] li,
+        div[role="listbox"] li {
+            color: #0F172A !important;
+            background-color: #FFFFFF !important;
+        }
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li:hover,
+        div[role="listbox"] li:hover {
+            background-color: #EEF2FF !important;
+        }
+
+        /* Primary buttons - Deep Indigo Gradient */
+        button[data-testid="stBaseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(135deg, #4338CA 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+        }
+
+        /* Secondary buttons - Crisp Rose */
+        button[data-testid="stBaseButton-secondary"],
+        button[kind="secondary"] {
+            background-color: #E11D48 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 10px rgba(225, 29, 72, 0.22) !important;
+        }
+
+        /* Tertiary buttons - Dark Slate */
+        button[data-testid="stBaseButton-tertiary"],
+        button[kind="tertiary"] {
+            background-color: #1E293B !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+        }
+
+        /* Keep white text strictly inside action buttons */
+        button[data-testid="stBaseButton-primary"] p,
+        button[data-testid="stBaseButton-primary"] span,
+        button[kind="primary"] p,
+        button[kind="primary"] span,
+        button[data-testid="stBaseButton-secondary"] p,
+        button[data-testid="stBaseButton-secondary"] span,
+        button[kind="secondary"] p,
+        button[kind="secondary"] span,
+        button[data-testid="stBaseButton-tertiary"] p,
+        button[data-testid="stBaseButton-tertiary"] span,
+        button[kind="tertiary"] p,
+        button[kind="tertiary"] span {
+            color: #FFFFFF !important;
+        }
+
+        button:hover:not(:disabled) {
+            opacity: 0.92 !important;
+            transform: translateY(-1px) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+
+        button:disabled {
+            opacity: 0.45 !important;
+        }
+
+        /* Alerts (st.warning, st.info, st.error, st.success) */
+        div[data-testid="stAlert"] {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        div[data-testid="stAlert"] p,
+        div[data-testid="stAlert"] span {
+            color: #0F172A !important;
+            font-weight: 500 !important;
+        }
+
+        /* Dataframe */
+        div[data-testid="stDataFrame"] {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 14px !important;
+            padding: 0.5rem !important;
+            color: #0F172A !important;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        /* Modal Dialogs */
+        div[data-testid="stDialog"] div[role="dialog"] {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            border-radius: 18px !important;
+        }
+
+        /* Divider */
+        hr {
+            border-color: #CBD5E1 !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+
 def teacher_screen():
 
     style_background_dashboard()
     style_base_layout()
+    style_teacher_theme()
 
     if "teacher_data" in st.session_state:
         teacher_dashboard()
