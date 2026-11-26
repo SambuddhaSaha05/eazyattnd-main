@@ -1,4 +1,3 @@
-
 import streamlit as st
 from src.ui.base_layout import style_background_dashboard, style_base_layout
 from src.components.header import header_dashboard
@@ -16,32 +15,73 @@ from src.components.subject_card import subject_card
 def style_student_theme():
     st.markdown("""
     <style>
-        /* Student welcome heading */
+        /* Student welcome badge/heading - High-contrast surface so name always pops */
         .student-welcome {
-            color: #111827 !important;
-            font-size: 30px !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            color: #0F172A !important;
+            font-size: 26px !important;
             font-weight: 800 !important;
             font-family: 'Outfit', sans-serif !important;
+            padding: 0.65rem 1.25rem !important;
+            border-radius: 14px !important;
+            border: 1px solid #E2E8F0 !important;
+            border-left: 5px solid #4338CA !important;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+            margin-bottom: 0.75rem !important;
+            display: inline-block !important;
         }
 
-        /* Headings */
-        h1, h2, h3, h4 {
-            color: #111827 !important;
+        /* Headings across dashboard & cards */
+        h1, h2, h3, h4,
+        div[data-testid="stHeading"] h1,
+        div[data-testid="stHeading"] h2,
+        div[data-testid="stHeading"] h3,
+        div[data-testid="stHeading"] h4 {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.02em !important;
         }
 
-        /* Widget labels */
+        /* Subject cards & bordered containers (registration card, etc.) */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem !important;
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.07) !important;
+        }
+
+        /* Ensure all text inside subject cards, markdown blocks, and metrics is readable */
+        div[data-testid="stMarkdownContainer"] p,
+        div[data-testid="stMarkdownContainer"] span,
+        div[data-testid="stMarkdownContainer"] strong,
+        div[data-testid="stMarkdownContainer"] div,
+        div[data-testid="stMetricValue"],
+        div[data-testid="stMetricLabel"] p {
+            color: #0F172A !important;
+        }
+
+        /* Widget labels (Text input, Camera input, Audio input) */
         div[data-testid="stWidgetLabel"] p,
-        div[data-testid="stWidgetLabel"] label {
-            color: #1F2937 !important;
+        div[data-testid="stWidgetLabel"] label,
+        div[data-testid="stCameraInput"] label,
+        div[data-testid="stAudioInput"] label {
+            color: #1E293B !important;
             font-weight: 600 !important;
         }
 
-        /* Inputs */
+        /* Inputs - Crisp white field with dark text */
         input, textarea {
             background-color: #FFFFFF !important;
-            color: #111827 !important;
-            -webkit-text-fill-color: #111827 !important;
+            color: #0F172A !important;
+            -webkit-text-fill-color: #0F172A !important;
+            border: 1.5px solid #CBD5E1 !important;
             border-radius: 10px !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4338CA !important;
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15) !important;
         }
 
         /* Placeholder */
@@ -51,46 +91,72 @@ def style_student_theme():
             -webkit-text-fill-color: #64748B !important;
         }
 
-        /* Primary buttons */
+        /* Primary buttons (Enroll, Create Account) - Indigo Gradient */
         button[data-testid="stBaseButton-primary"],
         button[kind="primary"] {
-            background-color: #4F46E5 !important;
+            background: linear-gradient(135deg, #4338CA 0%, #2563EB 100%) !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22) !important;
         }
 
-        /* Secondary buttons */
+        /* Secondary buttons (Logout, Go back to Home) - Refined Rose */
         button[data-testid="stBaseButton-secondary"],
         button[kind="secondary"] {
-            background-color: #DB3A93 !important;
+            background-color: #E11D48 !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 10px rgba(225, 29, 72, 0.2) !important;
         }
 
-        /* Tertiary buttons */
+        /* Tertiary buttons (Unenroll) - Deep Slate */
         button[data-testid="stBaseButton-tertiary"],
         button[kind="tertiary"] {
-            background-color: #111827 !important;
+            background-color: #1E293B !important;
             color: #FFFFFF !important;
             border: none !important;
+            border-radius: 10px !important;
+            font-weight: 600 !important;
         }
 
-        button p, button span {
+        /* Force white text strictly inside styled action buttons */
+        button[data-testid="stBaseButton-primary"] p,
+        button[data-testid="stBaseButton-primary"] span,
+        button[kind="primary"] p,
+        button[kind="primary"] span,
+        button[data-testid="stBaseButton-secondary"] p,
+        button[data-testid="stBaseButton-secondary"] span,
+        button[kind="secondary"] p,
+        button[kind="secondary"] span,
+        button[data-testid="stBaseButton-tertiary"] p,
+        button[data-testid="stBaseButton-tertiary"] span,
+        button[kind="tertiary"] p,
+        button[kind="tertiary"] span {
             color: #FFFFFF !important;
         }
 
         button:hover {
-            opacity: 0.92 !important;
-            transition: 0.2s ease-in-out;
+            opacity: 0.94 !important;
+            transform: translateY(-1px) !important;
+            transition: all 0.2s ease-in-out !important;
         }
 
-        /* Alerts */
+        /* Alerts (Info, Warning, Error) */
         div[data-testid="stAlert"] {
+            background-color: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid #CBD5E1 !important;
             border-radius: 12px !important;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05) !important;
         }
 
-        div[data-testid="stAlert"] p {
-            color: #111827 !important;
+        div[data-testid="stAlert"] p,
+        div[data-testid="stAlert"] span {
+            color: #0F172A !important;
+            font-weight: 500 !important;
         }
 
         /* Divider */
