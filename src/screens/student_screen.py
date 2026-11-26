@@ -14,6 +14,152 @@ import time
 from src.components.dialog_enroll import enroll_dialog
 from src.components.subject_card import subject_card
 
+
+def style_student_theme():
+    st.markdown("""
+    <style>
+        /* Force clean light background so dark text always has high contrast */
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"] {
+            background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%) !important;
+            color: #0F172A !important;
+        }
+
+        /* All headings (including st.subheader for Welcome, Name) */
+        h1, h2, h3, h4, h5, h6,
+        div[data-testid="stHeading"] h1,
+        div[data-testid="stHeading"] h2,
+        div[data-testid="stHeading"] h3,
+        div[data-testid="stHeading"] h4 {
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+
+        /* All general text, markdown, captions, and spinner text */
+        p, span, label, div[data-testid="stText"],
+        div[data-testid="stMarkdownContainer"] p,
+        div[data-testid="stMarkdownContainer"] span,
+        div[data-testid="stMarkdownContainer"] strong,
+        div[data-testid="stSpinner"] p,
+        div[data-testid="stSpinner"] div {
+            color: #1E293B !important;
+        }
+
+        /* Widget labels (Text input, Camera input, Audio input) */
+        div[data-testid="stWidgetLabel"] p,
+        div[data-testid="stWidgetLabel"] label,
+        div[data-testid="stCameraInput"] label,
+        div[data-testid="stAudioInput"] label {
+            color: #0F172A !important;
+            font-weight: 600 !important;
+        }
+
+        /* Bordered containers (Registration form & cards) */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem !important;
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08) !important;
+        }
+
+        /* Text inputs */
+        input, textarea {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+            -webkit-text-fill-color: #0F172A !important;
+            border: 1.5px solid #94A3B8 !important;
+            border-radius: 10px !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4338CA !important;
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.18) !important;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #64748B !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #64748B !important;
+        }
+
+        /* Primary buttons (Enroll in Subject, Create Account) - Deep Indigo */
+        button[data-testid="stBaseButton-primary"],
+        button[kind="primary"] {
+            background: linear-gradient(135deg, #4338CA 0%, #2563EB 100%) !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+        }
+
+        /* Secondary buttons (Logout, Go back to Home) - Crisp Rose */
+        button[data-testid="stBaseButton-secondary"],
+        button[kind="secondary"] {
+            background-color: #E11D48 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 10px rgba(225, 29, 72, 0.22) !important;
+        }
+
+        /* Tertiary buttons (Unenroll) - Dark Slate */
+        button[data-testid="stBaseButton-tertiary"],
+        button[kind="tertiary"] {
+            background-color: #1E293B !important;
+            color: #FFFFFF !important;
+            border: none !important;
+            border-radius: 10px !important;
+            font-weight: 600 !important;
+        }
+
+        /* Keep white text strictly inside action buttons */
+        button[data-testid="stBaseButton-primary"] p,
+        button[data-testid="stBaseButton-primary"] span,
+        button[kind="primary"] p,
+        button[kind="primary"] span,
+        button[data-testid="stBaseButton-secondary"] p,
+        button[data-testid="stBaseButton-secondary"] span,
+        button[kind="secondary"] p,
+        button[kind="secondary"] span,
+        button[data-testid="stBaseButton-tertiary"] p,
+        button[data-testid="stBaseButton-tertiary"] span,
+        button[kind="tertiary"] p,
+        button[kind="tertiary"] span {
+            color: #FFFFFF !important;
+        }
+
+        button:hover {
+            opacity: 0.92 !important;
+            transform: translateY(-1px) !important;
+            transition: all 0.2s ease-in-out !important;
+        }
+
+        /* Alerts (st.warning, st.info, st.error) */
+        div[data-testid="stAlert"] {
+            background-color: #FFFFFF !important;
+            border: 1.5px solid #CBD5E1 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        div[data-testid="stAlert"] p,
+        div[data-testid="stAlert"] span {
+            color: #0F172A !important;
+            font-weight: 500 !important;
+        }
+
+        /* Divider */
+        hr {
+            border-color: #CBD5E1 !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+
 def student_dashboard():
     student_data = st.session_state.student_data
     student_id = student_data['student_id']
@@ -69,7 +215,7 @@ def student_dashboard():
         def unenroll_button():
                 if st.button("Unenroll from tihs course", type='tertiary', width='stretch', icon=':material/delete_forever:'):
                     unenroll_student_to_subject(student_id, sid)
-                    st.toast(f'Unenrolled from {sub['name']} successfully!')
+                    st.toast(f'Unenrolled from {sub["name"]} successfully!')
                     st.rerun()
 
         with cols[i % 2]:
@@ -92,6 +238,7 @@ def student_screen():
 
     style_background_dashboard()
     style_base_layout()
+    style_student_theme()
 
 
     if "student_data" in st.session_state:
@@ -133,7 +280,7 @@ def student_screen():
                         st.session_state.is_logged_in = True
                         st.session_state.user_role = 'student'
                         st.session_state.student_data = student
-                        st.toast(f'Welcome Back {student['name']}')
+                        st.toast(f'Welcome Back {student["name"]}')
                         time.sleep(1)
                         st.rerun()
                 else:
