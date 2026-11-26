@@ -2,7 +2,6 @@
 import streamlit as st
 
 from src.ui.base_layout import style_background_dashboard, style_base_layout
-
 from src.components.header import header_dashboard
 from src.components.footer import footer_dashboard
 from src.components.subject_card import subject_card
@@ -10,120 +9,116 @@ from src.database.db import check_teacher_exists, create_teacher, teacher_login,
 from src.components.dialog_create_subject import create_subject_dialog
 from src.components.dialog_share_subject import share_subject_dialog
 from src.components.dialog_add_photo import add_photos_dialog
-
 from src.pipelines.face_pipeline import predict_attendance
 from src.components.dialog_attendance_results import attendance_result_dialog
 import numpy as np
-
 from datetime import datetime
 import pandas as pd
-
 from src.database.config import supabase
 from src.components.dialog_voice_attendance import voice_attendance_dialog
 
 
 # --------------------------------------------------
-# EAZY ATTND - COLOR THEME
+# EAZY ATTND - PREMIUM COLOR THEME
 # --------------------------------------------------
 
 def style_teacher_theme():
     st.markdown("""
     <style>
 
-    /* Main text */
-    p, label, span, div[data-testid="stWidgetLabel"] {
-        color: #111827;
-    }
+        /* Main headings */
+        h1, h2, h3, h4 {
+            color: #111827 !important;
+        }
 
-    /* Headings */
-    h1, h2, h3, h4 {
-        color: #111827 !important;
-    }
+        /* Welcome message */
+        .teacher-welcome {
+            color: #111827 !important;
+            font-size: 30px !important;
+            font-weight: 800 !important;
+            font-family: 'Outfit', sans-serif !important;
+        }
 
-    /* Welcome message */
-    .teacher-welcome {
-        color: #111827 !important;
-        font-size: 30px !important;
-        font-weight: 800 !important;
-        font-family: 'Outfit', sans-serif !important;
-    }
+        /* Widget labels */
+        div[data-testid="stWidgetLabel"] p,
+        div[data-testid="stWidgetLabel"] label {
+            color: #1F2937 !important;
+            font-weight: 600 !important;
+        }
 
-    /* Input fields */
-    input, textarea {
-        background-color: #FFFFFF !important;
-        color: #111827 !important;
-        -webkit-text-fill-color: #111827 !important;
-        border-radius: 10px !important;
-    }
+        /* Input fields */
+        input, textarea {
+            background-color: #FFFFFF !important;
+            color: #111827 !important;
+            -webkit-text-fill-color: #111827 !important;
+            border-radius: 10px !important;
+        }
 
-    /* Placeholder text */
-    input::placeholder, textarea::placeholder {
-        color: #6B7280 !important;
-        opacity: 1 !important;
-        -webkit-text-fill-color: #6B7280 !important;
-    }
+        /* Placeholder text */
+        input::placeholder, textarea::placeholder {
+            color: #64748B !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #64748B !important;
+        }
 
-    /* Input labels */
-    div[data-testid="stWidgetLabel"] p,
-    div[data-testid="stWidgetLabel"] label {
-        color: #1F2937 !important;
-        font-weight: 600 !important;
-    }
+        /* Primary buttons - Indigo */
+        button[data-testid="stBaseButton-primary"],
+        button[kind="primary"] {
+            background-color: #4F46E5 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+        }
 
-    /* Primary buttons - Indigo */
-    button[data-testid="stBaseButton-primary"],
-    button[kind="primary"] {
-        background-color: #4F46E5 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-    }
+        /* Secondary buttons - Pink */
+        button[data-testid="stBaseButton-secondary"],
+        button[kind="secondary"] {
+            background-color: #DB3A93 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+        }
 
-    /* Secondary buttons - Pink */
-    button[data-testid="stBaseButton-secondary"],
-    button[kind="secondary"] {
-        background-color: #DB3A93 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-    }
+        /* Tertiary buttons - Navy */
+        button[data-testid="stBaseButton-tertiary"],
+        button[kind="tertiary"] {
+            background-color: #111827 !important;
+            color: #FFFFFF !important;
+            border: none !important;
+        }
 
-    /* Tertiary buttons */
-    button[data-testid="stBaseButton-tertiary"],
-    button[kind="tertiary"] {
-        background-color: #111827 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-    }
+        /* Button labels */
+        button p, button span {
+            color: #FFFFFF !important;
+        }
 
-    /* Button text and icons */
-    button p, button span {
-        color: #FFFFFF !important;
-    }
+        /* Hover effect */
+        button:hover {
+            opacity: 0.92 !important;
+            transition: 0.2s ease-in-out;
+        }
 
-    /* Button hover */
-    button:hover {
-        opacity: 0.90 !important;
-        transition: 0.2s ease-in-out;
-    }
+        /* Alerts - preserve readable text */
+        div[data-testid="stAlert"] {
+            border-radius: 12px !important;
+        }
 
-    /* Dividers */
-    hr {
-        border-color: #94A3B8 !important;
-    }
+        div[data-testid="stAlert"] p {
+            color: #111827 !important;
+        }
 
-    /* Alerts */
-    div[data-testid="stAlert"] {
-        border-radius: 12px !important;
-    }
+        /* Selectbox text */
+        div[data-baseweb="select"] div {
+            color: #111827 !important;
+        }
 
-    /* Select box text */
-    div[data-baseweb="select"] div {
-        color: #111827 !important;
-    }
+        /* Dataframe text */
+        div[data-testid="stDataFrame"] {
+            color: #111827 !important;
+        }
 
-    /* Dataframe text */
-    div[data-testid="stDataFrame"] {
-        color: #111827 !important;
-    }
+        /* Divider */
+        hr {
+            border-color: #CBD5E1 !important;
+        }
 
     </style>
     """, unsafe_allow_html=True)
@@ -167,7 +162,6 @@ def teacher_dashboard():
 
     with c2:
 
-        # Dark and visible teacher welcome text
         st.markdown(
             f"""
             <h2 class="teacher-welcome">
@@ -337,8 +331,8 @@ def teacher_tab_take_attendance():
                 'Run Face Analysis',
                 width='stretch',
                 type='secondary',
-                icon=':material/analytics:',
-                disabled=not has_photos
+                disabled=not has_photos,
+                icon=':material/analytics:'
             ):
 
                 with st.spinner('Deep scanning classroom photos...'):
@@ -449,7 +443,6 @@ def teacher_tab_manage_subjects():
         ):
             create_subject_dialog(teacher_id)
 
-    # List subjects
     subjects = get_teacher_subjects(teacher_id)
 
     if subjects:
@@ -461,15 +454,15 @@ def teacher_tab_manage_subjects():
                 ("🕰️", "Classes", sub['total_classes']),
             ]
 
-            def share_btn():
+            def share_btn(subject_name=sub['name'], subject_code=sub['subject_code']):
                 if st.button(
-                    f"Share Code: {sub['name']}",
-                    key=f"share_{sub['subject_code']}",
+                    f"Share Code: {subject_name}",
+                    key=f"share_{subject_code}",
                     icon=":material/share:"
                 ):
                     share_subject_dialog(
-                        sub['name'],
-                        sub['subject_code']
+                        subject_name,
+                        subject_code
                     )
 
                 st.space()
@@ -617,7 +610,7 @@ def teacher_screen_login():
 
             if login_teacher(teacher_username, teacher_pass):
 
-                st.toast("welcome back!", icon="👋")
+                st.toast("Welcome back!", icon="👋")
 
                 import time
                 time.sleep(1)
@@ -666,9 +659,9 @@ def register_teacher(
             teacher_pass,
             teacher_name
         )
-        return True, "Sucessfully Created! Login Now"
+        return True, "Successfully Created! Login Now"
 
-    except Exception as e:
+    except Exception:
         return False, "Unexpected Error!"
 
 
