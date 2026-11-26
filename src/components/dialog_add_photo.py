@@ -13,7 +13,6 @@ def add_photos_dialog():
     if 'photo_tab' not in st.session_state:
         st.session_state.photo_tab = 'camera'
 
-    #t -> tab
     t1, t2 = st.columns(2)
 
     with t1:
@@ -25,7 +24,7 @@ def add_photos_dialog():
 
     with t2:
         type_upload = "primary" if st.session_state.photo_tab == 'upload' else 'tertiary'
-        if st.button('Upload Photos', type=type_upload, width='stretch'):
+        if st.button('Upload photos', type=type_upload, width='stretch'):
             st.session_state.photo_tab = 'upload'
 
     if st.session_state.photo_tab == 'camera':
